@@ -1,0 +1,10 @@
+<ion-view title="Contacts">
+    <ion-content>
+        <!--<div class="text-center padding">Implement this screen yourself!</div>-->
+        <ion-list>
+            <ion-item ng-repeat="contact in phoneContacts" class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap">
+                <h2>{{contact.name.formatted}}</h2>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
