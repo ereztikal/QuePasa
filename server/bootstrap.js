@@ -1,5 +1,6 @@
 Meteor.startup(function () {
     // Using Meteor’s authentication Accounts-phone package
+    // Adding hard-coded users for presentation
     if (Accounts.users.find().count() === 0) {
         Accounts.createUserWithPhone({
             phone: '+972501234567',
@@ -21,36 +22,46 @@ Meteor.startup(function () {
             phone: '+972501234569',
             profile: {
                 name: 'Jane Doe',
-                    picture: 'https://randomuser.me/api/portraits/thumb/women/1.jpg'
+                picture: 'https://randomuser.me/api/portraits/thumb/women/1.jpg'
             }
         });
     }
 
-    var socket = io('wss://w2.web.whatsapp.com/ws', {tag:'1445540456.--0',data:["admin", "init", [0,1,4770], ["Mac OS 10.10.5","Chrome"], "5XzFmdz0/jd0GIUEyoy/Pw==", true]});
-//    console.log(socket);
-//    socket.emit('subscribe', 'data-feed-name-goes-here');
+    // Mockup chat for presentation
+    if (Chats.find({_id: "demoChat1"}).count() === 0) {
+        var chat = {
+            _id: "demoChat1",
+            userIds: [ 'dBfAzknKbTj89jKdE', 'k9Rk2ZsufYJr4BeFq' ],
+            createdAt: new Date()
+        };
 
-    socket.on('connect', Meteor.bindEnvironment(function() {
-        console.log('Connected to the websocket!');
-//        Meteor.call('methodName1');
+        Chats.insert(chat);
+        var messages = [
+            {
+                "text" : "Hi there!",
+                "type" : "text",
+                "chatId" : chat._id,
+                "timestamp" : new Date(),
+                "userId" : "dBfAzknKbTj89jKdE"
+            },{
+                "text" : "Que pasa?",
+                "type" : "text",
+                "chatId" : chat._id,
+                "timestamp" : new Date(),
+                "userId" : "k9Rk2ZsufYJr4BeFq"
+            },
+            {
+                "text" : "All good my man",
+                "type" : "text",
+                "chatId" : chat._id,
+                "timestamp" : new Date(),
+                "userId" : "dBfAzknKbTj89jKdE"
+            }
+        ];
 
-        // on data event
-        socket.on('data-event', Meteor.bindEnvironment(function(data) {
-//            console.log(data);
-//            Meteor.call('methodName2');
-        }, function(e) {
-            throw e;
-        }));
-
-        // on disconnect
-        socket.on('disconnect', Meteor.bindEnvironment(function() {
-            console.log('Disconnected from the websocket!');
-//            Meteor.call('methodName3');
-        }, function(e) {
-            throw e;
-        }));
-
-    }, function(e) {
-        throw e;
-    }));
+        Messages.insert(messages[0]);
+        Messages.insert(messages[1]);
+        Messages.insert(messages[2]);
+        Chats.update(chat._id, {$set: {lastMessage: messages[2]}});
+    }
 });

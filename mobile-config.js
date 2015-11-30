@@ -10,3 +10,5 @@ App.launchScreens({
     'ipad_landscape':'public/splash/Default-Landscape~ipad.png',
     'ipad_landscape_2x':'public/splash/Default-Landscape@2x~ipad.png'
 });
+
+App.accessRule('*');
